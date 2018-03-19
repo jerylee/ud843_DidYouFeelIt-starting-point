@@ -75,14 +75,18 @@ public class MainActivity extends AppCompatActivity {
     private class EarthquakeAsyncTask extends AsyncTask<String, Void, Event> {
 
         protected Event doInBackground(String... urls) {
+            // Don't perform the request if there are no URLs, or the first URL is null.
+            if (urls.length < 1 || urls[0] == null) {
+                return null;
+            }
             Event result = Utils.fetchEarthquakeData(urls[0]);
             return result;
         }
 
-        /**
-         * Disable it, because not use.
-         * @param result
-         */
+//        /**
+//         * Disable it, because not use.
+//         * @param result
+//         */
 //        protected void onProgressUpdate(Integer... progress) {
 //            setProgressPercent(progress[0]);
 //        }
@@ -93,6 +97,19 @@ public class MainActivity extends AppCompatActivity {
          * (which was returned from the doInBackground() method) and update the views on the screen.
          */
 
+        protected void onPostExecute(Event result) {
+            updateUi(result);
+        }
+    }
+
+    private class x extends AsyncTask<String, Void, Event> {
+        @Override
+        protected Event doInBackground(String... url) {
+            Event result = Utils.fetchEarthquakeData(url[0]);
+            return result;
+        }
+
+        @Override
         protected void onPostExecute(Event result) {
             updateUi(result);
         }
